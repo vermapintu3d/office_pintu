@@ -1,0 +1,19 @@
+Ubuntu Commant:
+
+$python3 -V
+
+Install pip first
+$ sudo apt-get install python3-pip
+
+then install:
+$ sudo pip3 install virtualenv
+
+
+Let’s start by installing the python3-venv package that provides the venv module.
+$ sudo apt install python3-venv
+
+Create Vertual:
+ $ python3 -m venv myenv
+
+activate env
+$source myenv/bin/activate

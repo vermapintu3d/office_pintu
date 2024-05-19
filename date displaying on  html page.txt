@@ -1,0 +1,56 @@
+<select id="bloodgroup" name="bloodgroup">
+                        <option>{{i.blood_group}}</option>
+                        <option>Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O+">O-</option>
+                    </select>
+                </td>
+
+
+
+<td>
+                    <input type="date" name="dob" style="width:164px" value="{{i.date_of_birth |date:'d-m-Y'}}">
+                </td>
+
+>>>>>>>>>>>>>>>>>>>Check Box<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+>>>>>>>>>>>>>>>>>>>Create Page>>>>>>>>>>
+ <td><label for="other1">Indian</label></td>
+                        <td style="text-align: left;"><input type="checkbox" id="other1" onclick="check_func()" name="indian" value="hidden_check">
+                        <input type="hidden" id="hidden_check" name="hidden_check" value=""></td>
+
+
+
+
+
+>>>>>>>Update page>>>>>.
+<td><label for="other1">Indian</label></td>
+	 {% if x.indian %}
+                        <td style="text-align: left;"><input type="checkbox" id="other1" checked onclick="check_func()" >
+                        <input type="hidden" id="hidden_check" name="hidden_check" value="True"></td>
+	{% else %}
+	        <td style="text-align: left;"><input type="checkbox" id="other1" onclick="check_func()">
+                        <input type="hidden" id="hidden_check" name="hidden_check" value="False"></td>
+	{% endif %}
+                    </tr>
+
+<script>
+function check_func(){
+var v1 = $('#other1').prop('checked');
+if (v1)
+  {
+     $('#hidden_check').val('True');
+  }
+else
+  {
+     $('#hidden_check').val('False');
+  }
+    }
+
+</script>

@@ -1,0 +1,13 @@
+  <script>
+    $(document).ready(function() {
+           var $inputFields = $('.form-control');
+           var $checkbox = $('#checkbox');
+
+    $inputFields.on('input', function() {
+          var allFilled = $inputFields.toArray().every(function(field) {
+          return $(field).val().trim() !== '';
+        });
+     $checkbox.prop('checked', allFilled);
+      });
+    });
+  </script>

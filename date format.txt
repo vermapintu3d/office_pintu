@@ -1,0 +1,59 @@
+from datetime import datetime
+ 
+input_date = "01/17/2024"
+
+s = datetime.strptime(input_date , "%m/%d/%Y").strftime("%Y-%m-%d")
+print(s)
+
+
+views.py
+  else:
+        formdata = Form_Database.objects.filter(pk=id)
+
+        adate = Form_Database.objects.get(pk=id)
+        x = str(adate.date)
+        date_f = datetime.strptime(x, "%Y-%m-%d").strftime("%d-%b-%Y")
+
+    return render(request, "updateform1.html", {"formdata":formdata, "id":id, "date_f":date_f})
+
+html>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="effective_date'+i+'" value="{{fill_detail.dft_effective_date|date:'d-M-Y'}}"></td>';
+
+
+<script>
+var i=1;
+function add_workflow_row(){
+	html = '';
+	html += '<tr id="main_tr'+i+'">';
+	html += '<td><input type="text" row-id='+i+' id="w_checkbox_id" value="'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_action_date_time'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_action'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_person_type'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_recruiter'+i+'"></td>';
+
+	html += '<td row-id='+i+'>'
+	        html += '<input type="radio" class="form_data" onclick="radio_yes_func('+i+')" name= "radio_value'+i+'" row-id='+i+' id="wft_radio_yes'+i+'" >Yes<br>';
+	        html += '<input type="hidden" class="form_data" name= "radio_value'+i+'" row-id='+i+' id="radio_yes'+i+'" value="False">';
+
+	        html += '<input type="radio" class="form_data" onclick="radio_no_func('+i+')" name="radio_value'+i+'" row-id='+i+' id="wft_radio_no'+i+'">No';
+	        html += '<input type="hidden" class="form_data" name= "radio_value'+i+'" row-id='+i+' id="radio_no'+i+'" value="False">';
+	html += '</td>';
+
+    	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_applicant_status'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_start_date'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_end_date'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_status'+i+'"></td>';
+	html += '<td><input type="text" class="form_data" row-id='+i+' id="wft_remarks'+i+'"></td>';
+
+	html += '<input type="hidden" row-id='+i+' id="work_mapp_id'+i+'" value="0"></td>';
+
+	html += '<td><i class="fa fa-trash" id="delete_row'+i+'" onclick="delete_workflow_row('+i+')"><i/></td>';
+	html += '</tr>';
+
+    $('#work_flow_table > tbody').append(html);
+    $("#wft_action_date_time"+i).datepicker({dateFormat: 'dd-M-yy'});
+    $("#wft_start_date"+i).datepicker({dateFormat: 'dd-M-yy'});
+    $("#wft_end_date"+i).datepicker({dateFormat: 'dd-M-yy'});
+    i++;
+}
+<script>

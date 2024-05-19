@@ -1,0 +1,17 @@
+<scripts>
+var formData = new FormData($('#yourForm')[0]);
+$.ajax({
+    url: "yourURL",  // where you wanna post
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data) 
+{
+	alert("Data saved")
+	console.log(data)
+} 
+});
+</scripts>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

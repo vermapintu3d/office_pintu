@@ -1,0 +1,35 @@
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<input type="text" id="datepicker">
+
+<script>
+$('#datepicker').datepicker(
+{
+   dateFormat: 'dd-M-yy'
+    }
+).datepicker("setDate",'now');     ##for current date showing on input if not need remove it
+
+</script>
+
+>>>>>>>showing current date<<<<<<
+$(".datepicker").datepicker({dateFormat: 'dd-M-yy'});
+$(".datepicker").datepicker("setDate", new Date());
+
+
+Date picker with current date and basic settings:
+
+// Datepicker
+$('.datepicker').datepicker({
+    autoclose: true,
+    format: "yyyy-mm-dd",
+    immediateUpdates: true,
+    todayBtn: true,
+    todayHighlight: true
+}).datepicker("setDate", "0");
+
+
+
+
+

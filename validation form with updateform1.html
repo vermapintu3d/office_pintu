@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form1</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<style>
+    .mobile{width:85% }
+    body{
+    background-color:lightblue;
+    padding-left:30%;
+    padding-right:40%;
+    padding-top:1%;}
+    .form-control{color:black;}
+
+    input {
+  width: 100%;
+}
+</style>
+</head>
+<body>
+<form style="background-color:white;" class="form-control" id="form_id"  method="POST" >
+{% csrf_token %}
+
+        <div align="center">
+            <h1 style="color:purple;">Update Form </h1>
+            <p style="color:red">"Note: All field are required to fill"</p>
+        </div><br>
+    {% for x in formdata %}
+        <div>
+            <label><b>First Name:</b></label><br>
+        <input type="text" value="{{x.firstname}}" id="firstname" name="firstname" placeholder="Enter your firstname" ONCHANGE="index_func()" >
+        </div><br>
+        <div>
+        <label><b>Last Name:</b></label><br>
+        <input type="text" value="{{x.lastname}}" id="lastname" name="lastname" placeholder="Enter your lastname" onchange="index_func()">
+        </div><br>
+        <div>
+        <label><b>Email id:</b></label><br>
+        <input type="text" value="{{x.email}}" id="email" name="email" placeholder="example@gmail.com" onchange="index_func()">
+
+        </div><br>
+        <div>
+        <label><b>Mobile No.:</b></label><br>
+                <select name="countrycode" >
+                        <option>{{x.countrycode}}</option>
+                        <option value="+91">+91</option>
+                        <option value="+92">+92</option>
+                        <option value="+93">+93</option>
+                </select>
+        <input type="text" class="mobile" value="{{x.mobile}}" id="mobile" name="mobile" placeholder="XXXXXXXXXX" onchange="index_func()">
+        </div><br>
+        <div>
+        <label><b>Date of Birth:</b></label><br>
+        <input type="text" id="datepicker" value="{{date_f}}" name="date" placeholder="DD-MON-YYYY">
+        </div><br>
+
+    <input type="button" onclick="index_func()" value="Update"/>
+    <input type="button" value="Delete" onclick="delete_func()"/>
+
+    <input type="hidden" id="delete"  value="{{id}}">
+{% endfor %}
+</form>
+
+<script>
+
+function index_func() {
+
+     var f_name = $('#firstname').val();
+     var l_name = $('#lastname').val();
+     var email = $('#email').val();
+     var mobile_no = $('#mobile').val();
+     var date = $('#datepicker').val();
+
+if(f_name=="" && l_name=="" && email=="" && mobile_no=="" && date==""){
+    toastr.error("Please fill out all field are required");
+    return false;
+}
+
+ var f_name = $('#firstname').val();
+ var f_pattern = /^[A-Za-z\s]+$/;
+
+ if (f_name==""){
+    toastr.error("Please fill the firstname")
+    return false;
+ }
+
+ if (!f_pattern.test(f_name)){
+     toastr.error('Invalid firstname: Please use only alphabets and spaces.');
+     return false;
+ }
+
+ var l_name = $('#lastname').val();
+  var l_pattern = /^[A-Za-z\s]+$/;
+
+ if (l_name==""){
+    toastr.error("Please fill the lastname");
+    return false;
+ }
+ if (!l_pattern.test(l_name)){
+
+    toastr.error('Invalid lastname: Please use only alphabets and spaces.');
+    return false
+ }
+
+ var email = $('#email').val();
+ var email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if(email==""){
+      toastr.error("Please fill email");
+      return false;
+  }
+
+if(!email_pattern.test(email)){
+        toastr.error('Please enter a valid email address.');
+        return false;
+       }
+
+var mobileNumber = $('#mobile').val();
+      var mobile_no_pattern = /^[0-9]{10}$/;
+
+if (mobileNumber=="")
+      {
+      toastr.error("Please fill mobile number");
+      return false;
+      }
+if (!mobile_no_pattern.test(mobileNumber)){
+        toastr.error('Please enter 10-digit valid mobile number.');
+        return false;
+       }
+
+var date = $('#datepicker').val();
+
+if (date==""){
+      toastr.error("Please select or enter the date");
+      return false;
+      }
+
+
+var formData = new FormData($("#form_id")[0]);
+$.ajax({
+    url: "/form/update_form/{{id}}/",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data)
+    {
+        window.location.href = "/form/data_save/";
+        alert("Data Updated Successfully!!")
+    }
+});
+
+
+<!--if(f_name==f_name && l_name==l_name && email==email && mobile_no==mobile_no && date==date){-->
+<!--    toastr.success("Data saved successfully!!");-->
+<!--}-->
+
+}
+
+</script>
+<script>
+function delete_func(){
+var header_id = $('#delete').val();
+$.ajax({
+    url: "/form/delete/",
+    data: { header_id:header_id },
+    type: "POST",
+    success: function(data)
+    {
+       window.location.href = '/form/data_save/';
+       alert("Deleted Successfully!!")
+    }
+});
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+<script>
+$('#datepicker').datepicker(
+{
+   dateFormat: 'dd-M-yy'
+    });
+</script>
+<!-- <script>-->
+<!--     function myFunction(){-->
+<!--     var email_hidden = $(#'hidden_email').val();-->
+<!--      var email = $('#email').val();-->
+<!--        var email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;-->
+
+<!--      if(email=="")-->
+<!--      {-->
+<!--      alert("Please fill email");-->
+<!--      return false;-->
+<!--      }-->
+
+<!--      if(!email_pattern.test(email))-->
+<!--        {-->
+<!--        alert(email_hidden);-->
+<!--        return false;-->
+<!--       }-->
+<!--     }-->
+<!-- </script>-->
+</body>
+</html>

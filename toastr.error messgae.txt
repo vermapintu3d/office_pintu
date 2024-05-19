@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>jQuery with Toastr</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+</head>
+
+<body>
+ 
+<button id="ajaxButton">Make AJAX Request</button>
+ 
+<script>
+
+    $(document).ready(function () {
+
+        $('#ajaxButton').click(function () {
+
+            // Your AJAX request
+
+            $.ajax({
+
+                url: 'your-api-endpoint',
+
+                type: 'GET',
+
+                success: function (data) {
+
+                    // Display a success message using Toastr
+
+                    toastr.success('Request successful. Message: ' + data.message);
+
+                },
+
+                error: function (xhr, status, error) {
+
+                    // Handle error cases
+
+                    console.error('Error:', status, error);
+
+                    toastr.error('Error occurred while processing the request.');
+
+                }
+
+            });
+
+        });
+
+    });
+
+</script>
+ 
+</body>
+
+</html>

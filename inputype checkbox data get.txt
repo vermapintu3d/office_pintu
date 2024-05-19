@@ -1,0 +1,49 @@
+                    <tr>
+                        <td><label for="yes">Yes</label></td>
+                        <td style="text-align: left;"><input type="radio" id="yes" name="fav_language" value="Yes"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="no">No</label></td>
+                        <td style="text-align: left;"><input type="radio" id="no" name="fav_language" value="No"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="other1">Indian</label></td>
+                        <td style="text-align: left;"><input type="checkbox" id="other1" onclick="check_func()" name="indian">
+                        <input type="hidden" id="hidden_check" name="hidden_check" value=""></td>
+                    </tr>
+
+                            <button type="button" onclick="index_func()">Save</button>
+
+<script>
+function index_func(){
+var formData = new FormData($("#form_id")[0]);
+$.ajax({
+    url: "/transaction/save/",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data)
+    {
+        window.location.href = '/transaction/save/';
+        alert(data.msg)
+    }
+});
+}
+
+>>>>>>>>>>>>>>>>>>>>input type="checkbox" <<<<<<<<<<<<<<<<<<<
+
+function check_func(){
+var v1 = $('#other1').prop('checked');
+if (v1)
+  {
+     $('#hidden_check').val('True');
+  }
+else
+  {
+     $('#hidden_check').val('False');
+  }
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

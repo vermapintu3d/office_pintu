@@ -1,0 +1,79 @@
+
+function get_asset_code()
+{
+    var loc_code =  $('#purpose_id').val();
+    $("#purpose_hidden_id").val('');
+
+    if(loc_code)
+    {
+        $("#purpose_id").autocomplete({
+            source: function( request, response )
+            {
+                $.ajax({
+                    url:'/event_master/getting_event_master_dept/',
+                    data:{loc_code:loc_code},
+                    datatype:"text",
+                    success:function(data)
+                    {
+                        response($.map(data.doc_list, function (item)
+                        {
+                            return {
+                            label: item.label + '-' +item.description,
+                            value: item.label,
+                            id: item.id,
+                            code: item.code,
+                            description: item.description
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            autoFocus: true,
+            response: function(event,ui) {
+                    if (!ui.content.length)
+                    {
+                        var noResult = {value:"",label:"No results found", id:"" };
+                        ui.content.push(noResult);
+                    }
+                },
+            select: function (event, ui)
+            {
+                $("#purpose_hidden_id").val(ui.item.id);
+                $("#purpose_id").val(ui.item.description);
+            }
+        });
+    }
+}
+ 
+
+
+>>>>>>>>>>.view.py<<<<<<<<<<<
+
+def getting_event_master_dept(request):
+    company_id = request.session['company_id']
+    if request.method == 'GET':
+        asset_category_code = request.GET.get('loc_code')
+        item_code_list = asset_category_code.split(' ')
+        current_date = datetime.now().date()
+        search_filter = (Q(lookupl_from_dt__lte=current_date) & (
+                Q(lookupl_to_dt__gte=current_date) | Q(lookupl_to_dt__isnull=True)))
+        q = (Q(lookupl_code__icontains=item_code_list[0]) | Q(lookupl_description__icontains=item_code_list[0]))
+        for term in item_code_list[1:]:
+            if term != '':
+                q.add((Q(lookupl_code__icontains=term) | Q(lookupl_description__icontains=term)), Q.AND)
+        qs = Om_Lookup_Line.objects.filter(search_filter, q,
+                                           Q(lookupl_lookup__lookup_code__iexact='EVENT_MASTER_POPUP'))
+        doc_list = []
+        for qs1 in qs:
+            doc_dict = {}
+            doc_dict['label'] = str(qs1.lookupl_code) + '-' + str(qs1.lookupl_description)
+            doc_dict['description'] = qs1.lookupl_description
+            doc_dict['code'] = qs1.lookupl_code
+            doc_dict['id'] = qs1.pk
+            doc_list.append(doc_dict)
+        context = {
+            'doc_list': doc_list
+        }
+        return JsonResponse(context)
+ 

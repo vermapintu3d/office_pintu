@@ -1,0 +1,552 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+views.py
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from employee.models import Employee
+from django.views.decorators.csrf import csrf_exempt
+
+
+def infosave(request):
+    if request.method=="POST":
+        form=request.POST
+        first_name=form.get("first_name")
+        middle_name=form.get("middle_name")
+        last_name=form.get("last_name")
+        father_name=form.get("father_name")
+        mother_name=form.get("mother_name")
+        email=form.get("email")
+        password=form.get("password")
+        confirm_password=form.get("confirm_password")
+        local_address=form.get("local_address")
+        permanent_address=form.get("permanent_address")
+        institute_name=form.get("institute_name")
+        degree=form.get("degree")
+        year_of_passing=form.get("year_of_passing")
+        marks=form.get("marks")
+        company_name=form.get("company_name")
+        job_name=form.get("job_name")
+        experience=form.get("experience")
+
+        obj = Employee.objects.create(first_name=first_name, middle_name=middle_name, last_name=last_name, father_name=father_name,
+                                      mother_name=mother_name,email=email,password=password, local_address=local_address,
+                                      permanent_address=permanent_address, institute_name=institute_name, degree=degree,year_of_passing=
+                                      year_of_passing, marks=marks, company_name=company_name,job_name=job_name,experience=experience)
+
+        id = obj.id
+        msg = "Data save successfully!!"
+        my_data = {
+            "msg":msg,
+            "id":id
+            }
+        return JsonResponse(my_data)
+
+    return render(request, "index.html")
+
+def displaydata(request):
+    emp = Employee.objects.all().order_by('id').values()
+
+    return render(request, "allemployee.html",{"employee":emp})
+
+
+def update(request, id):
+    if request.method == "POST":
+        form = request.POST
+        first_name = form.get("first_name")
+        middle_name = form.get("middle_name")
+        last_name = form.get("last_name")
+        father_name = form.get("father_name")
+        mother_name = form.get("mother_name")
+        email = form.get("email")
+        password = form.get("password")
+        confirm_password = form.get("confirm_password")
+        local_address = form.get("local_address")
+        permanent_address = form.get("permanent_address")
+        institute_name = form.get("institute_name")
+        degree = form.get("degree")
+        year_of_passing = form.get("year_of_passing")
+        marks = form.get("marks")
+        company_name = form.get("company_name")
+        job_name = form.get("job_name")
+        experience = form.get("experience")
+
+        Employee.objects.filter(pk=id).update(
+        first_name=first_name,
+        middle_name=middle_name,
+        last_name=last_name,
+        father_name=father_name,
+        mother_name=mother_name,
+        email=email,
+        password=password,
+        local_address=local_address,
+        permanent_address=permanent_address,
+        institute_name=institute_name,
+        degree=degree,
+        year_of_passing=year_of_passing,
+        marks=marks,
+        company_name=company_name,
+        job_name=job_name,
+        experience=experience)
+
+        emp = Employee.objects.get(pk=id)
+        id = emp.id
+        msg = "Updated successfully!!"
+        my_data = {
+            "msg":msg,
+            "id":id
+            }
+        return JsonResponse(my_data)
+    else:
+        emp = Employee.objects.filter(pk=id)
+
+    return render(request, "update.html", {"employee":emp, "id":id})
+
+
+
+
+@csrf_exempt
+def delete(request):
+    if request.method=="POST":
+        header_id = request.POST.get('header_id')
+        Employee.objects.filter(pk=header_id).delete()
+    return HttpResponse()
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup form</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<form method="POST" id="form_id" name="form_id" action="/employee/allemp/">
+{% csrf_token %}
+<div class="container-fluid vh-100">
+    <div class="" style="margin-top:100px">
+        <div class="rounded d-flex justify-content-center">
+            <div class="col-lg-8 col-md-4 col-sm-12 shadow-lg p-5 bg-light">
+                <div class="text-center">
+                    <h3 class="text-primary">Create Account</h3>
+                </div>
+                <div class="p-4">
+                        <div class="d-flex col-lg-12">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="first_name" placeholder="First name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="middle_name" placeholder="Middle name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="last_name" placeholder="Last name">
+                            </div>
+                        </div>
+                        <div class="d-flex col-lg-12">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="father_name" placeholder="Father name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="mother_name" placeholder="Mother name">
+                            </div>
+                        </div>
+
+                        <div class="d-flex col-lg-12">
+                            <div class="input-group mb-3 m-1" style="width:340px">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-envelope text-white"></i></span>
+                                <input type="email" class="form-control" name="email" placeholder="Email">
+                            </div>
+                            <div class="m-1" >
+                                &nbsp; &nbsp; &nbsp; &nbsp; <label>Gender :-</label> &nbsp; &nbsp;
+                                <input type="radio" name="gender" id="radio1" value="female">&nbsp; Female &nbsp;
+                                <input type="radio" name="gender" id="radio2" value="male">&nbsp; Male &nbsp;
+                                <input type="radio" name="gender" id="radio3" value="other">&nbsp; Other &nbsp;
+                            </div>
+                        </div>
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-key-fill text-white"></i></span>
+                                <input type="password" class="form-control" name="password" placeholder="password">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-key-fill text-white"></i></span>
+                                <input type="password" class="form-control" name="confirm_password"
+                                       placeholder="confirm password">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-house-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="local_address"
+                                       placeholder="Local Address">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-house-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="permanent_address"
+                                       placeholder="permanent Address">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-bank text-white"></i></span>
+                                <input type="text" class="form-control" name="institute_name"
+                                       placeholder="institute name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-book-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="degree" placeholder="Education">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-calendar-date text-white"></i></span>
+                                <input type="number" class="form-control" name="year_of_passing"
+                                       placeholder="Year of Passing">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-sort-numeric-up-alt text-white"></i></span>
+                                <input type="number" class="form-control" name="marks" placeholder="Marks">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-building text-white"></i></span>
+                                <input type="text" class="form-control" name="company_name" placeholder="company name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="job_name" placeholder="job title">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-clock-fill text-white"></i></span>
+                                <input type="number" class="form-control" name="experience" placeholder="experience">
+                            </div>
+                        </div>
+                        <div class="d-grid col-12 mx-auto">
+                            <input class="btn btn-primary" type="button" value="Signup form"
+                                   onclick="index_func()">
+
+
+                        </div>
+                        <p class="text-center mt-3">Already have an account?
+                            <span class="text-primary">Sign in</span>
+                        </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</table>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script>
+function index_func(){
+var formData = new FormData($("#form_id")[0]);
+$.ajax({
+    url: '/employee/signup/',
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data)
+    {
+        window.location.href = '/employee/update/'+data.id+'/';
+        alert(data.msg)
+    }
+});
+}
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<br>
+<br>
+
+
+
+
+</body>
+</html>
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>> update.html <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update form</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+{% for emp in employee %}
+<form method="POST" id="form_id" name="form_id" >
+{% csrf_token %}
+<div class="container-fluid vh-100">
+    <div class="" style="margin-top:100px">
+        <div class="rounded d-flex justify-content-center">
+            <div class="col-lg-8 col-md-4 col-sm-12 shadow-lg p-5 bg-light">
+                <div class="text-center">
+                    <h3 class="text-primary">Update Details</h3>
+                </div>
+                <div class="p-4">
+                        <div class="d-flex col-lg-12">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" value="{{emp.first_name}}" name="first_name" placeholder="First name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" value="{{emp.middle_name}}" name="middle_name" placeholder="Middle name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" value="{{emp.last_name}}" name="last_name" placeholder="Last name">
+                            </div>
+                        </div>
+                        <div class="d-flex col-lg-12">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" value="{{emp.father_name}}" name="father_name" placeholder="Father name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" value="{{emp.mother_name}}" name="mother_name" placeholder="Mother name">
+                            </div>
+                        </div>
+                    <input type="hidden" id="delete" value="{{id}}">
+
+                        <div class="d-flex col-lg-12">
+                            <div class="input-group mb-3 m-1" style="width:340px">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-envelope text-white"></i></span>
+                                <input type="email" class="form-control" value="{{emp.email}}" name="email" placeholder="Email">
+                            </div>
+                            <div class="m-1" >
+                                &nbsp; &nbsp; &nbsp; &nbsp; <label>Gender :-</label> &nbsp; &nbsp;
+                                <input type="radio" name="gender" id="radio1" value="female">&nbsp; Female &nbsp;
+                                <input type="radio" name="gender" id="radio2" value="male">&nbsp; Male &nbsp;
+                                <input type="radio" name="gender" id="radio3" value="other">&nbsp; Other &nbsp;
+                            </div>
+                        </div>
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-key-fill text-white"></i></span>
+                                <input type="password" class="form-control" value="{{emp.password}}" name="password" placeholder="password">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-key-fill text-white"></i></span>
+                                <input type="password" class="form-control" name="confirm_password"
+                                       placeholder="confirm password" value="{{emp.confirm_password}}">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-house-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="local_address" value="{{emp.local_address}}"
+                                       placeholder="Local Address">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-house-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="permanent_address" value="{{emp.permanent_address}}"
+                                       placeholder="permanent Address">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-bank text-white"></i></span>
+                                <input type="text" class="form-control" name="institute_name" value="{{emp.institute_name}}"
+                                       placeholder="institute name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-book-fill text-white"></i></span>
+                                <input type="text" class="form-control" name="degree" value="{{emp.degree}}" placeholder="Education">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-calendar-date text-white"></i></span>
+                                <input type="number" class="form-control" name="year_of_passing" value="{{emp.year_of_passing}}"
+                                       placeholder="Year of Passing">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-sort-numeric-up-alt text-white"></i></span>
+                                <input type="number" class="form-control" value="{{emp.marks}}" name="marks" placeholder="Marks">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 d-flex">
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-building text-white"></i></span>
+                                <input type="text" class="form-control" value="{{emp.company_name}}" name="company_name" placeholder="company name">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-person-plus-fill text-white"></i></span>
+                                <input type="text" class="form-control" value="job_name" name="job_name" placeholder="job title">
+                            </div>
+                            <div class="input-group mb-3 m-1">
+                                    <span class="input-group-text bg-primary"><i
+                                            class="bi bi-clock-fill text-white"></i></span>
+                                <input type="number" class="form-control" value="experience" name="experience" placeholder="experience">
+                            </div>
+                        </div>
+                        <div class="d-grid col-12 mx-auto">
+                            <input class="btn btn-primary" type="button" value="Update form" onclick="index_func()">
+                        </div>
+                    <div class="d-grid col-12 mx-auto">
+                        <input class="btn btn-danger" type="button" value="Delete" onclick="delete_func()">
+                    </div>
+                        <p class="text-center mt-3">Already have an account?
+                            <span class="text-primary">Sign in</span>
+                        </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</table>
+</form>
+{% endfor %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script>
+function index_func(){
+var formData = new FormData($("#form_id")[0]);
+$.ajax({
+    url: "/employee/update/{{id}}/",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data)
+    {
+        window.location.href = "/employee/update/"+data.id+"/";
+        alert(data.msg)
+    }
+});
+}
+</script>
+<script>
+function delete_func(){
+var header_id = $('#delete').val();
+$.ajax({
+    url: "/employee/delete/",
+    data: { header_id:header_id },
+    type: "POST",
+    success: function(data)
+    {
+       window.location.href = '/employee/signup/';
+       alert("Deleted Successfully!!")
+    }
+});
+}
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</body>
+</html>
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+Project/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('student/', include('student.urls')),
+    path('employee/', include('employee.urls')),
+    path('transaction/', include('transaction.urls')),
+]
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+app/urls
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('signup/', views.infosave, name="signup"),
+    path('allemp/', views.displaydata, name="displaydata"),
+    path('update/<int:id>/', views.update, name="update"),
+    path('delete/', views.delete, name="delete"),
+   ]
+
+

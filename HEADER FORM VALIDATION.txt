@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Practice page</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<style>
+		body{
+			padding: 25px;
+		}
+		.header{
+			padding: 30px;
+		}
+		
+		.header table td{
+			padding: 3px 3px;
+			text-align: right;
+		}
+		.para_value{
+			padding: 10px;
+		}
+		.para_value table{
+			width: 100%;
+		}
+		.checkbox_c{
+			text-align: center;
+     		width: 2%;
+		}
+		.para_value input[type="text"]{
+			width: 100%;
+			border: none;
+		}
+		.para_value input[type="text"]:focus{
+			outline: none;
+			border: none;
+		}
+		.form-control{
+			height: 25px;
+			padding: 3px;
+			box-shadow: none;
+			border-radius: 2px;
+		}
+		.form-control:focus{
+			box-shadow: none;
+		}
+		.table-bordered tr th,td{
+			padding: 3px;
+		}
+		.add_lineitem{
+			padding: 10px;
+			text-align: right;
+		}
+	</style>
+</head>
+<body>
+<form method="POST" id="form_data" name="form_data">
+	{% csrf_token %}
+	<div class="parameter-data">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#header">Header</a></li>
+<!--					<li><a data-toggle="tab" href="#details">Details</a></li>-->
+				</ul>
+			</div>
+			<div class="tab-content">
+				<div id="header" class="tab-pane fade in active">
+					<div class="header">
+						<table>
+							<tr>
+								<td><label>Product Code</label></td>
+								<td><input type="text" class="form-control" onchange="pro_code(), checkbox_func(), newFunc()" id="product_code" name="product_code"></td>
+							</tr>
+							<tr>
+								<td><label>Product No.</label></td>
+								<td><input type="text" class="form-control" onchange="pro_no(), checkbox_func()" id="product_no" name="product_no"></td>
+							</tr>
+							<tr>
+								<td><label>Company Name</label></td>
+								<td><input type="text" class="form-control" onchange="company_n(), checkbox_func()" id="company_name" name="company_name"></td>
+							</tr>
+							<tr>
+								<td><label>Company Mail</label></td>
+								<td><input type="text" class="form-control" onchange="company_m(), checkbox_func()" id="company_mail" name="company_mail"></td>
+							</tr>
+							<tr>
+								<td><label>Product Verified</label></td>
+								<td style="text-align: left;"><input type="checkbox" id="checkbox"  onclick="check_func()" disabled>
+									<input type="hidden" name="hidden_check" id="hidden_check" value="True"></td>
+							</tr>
+							<tr>
+								<td><label>Placeholder</label></td>
+							
+								<td style="text-align: left;">
+									<input type="radio" name="now_later" value="Now">
+									<label>Now</label>
+									  <input type="radio" name="now_later" value="Later">
+									<label>Later</label>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" class="text-right">
+									<button type="reset">Reset</button>
+									<button type="button" name="" onclick="index_func()">Save</button>
+								</td>
+							</tr>
+						</table>
+						
+					</div>
+				</div>
+			</div>
+	</form>
+
+
+<script>
+function checkbox_func(){
+var product_code = $('#product_code').val().trim();
+var product_no = $('#product_no').val().trim();
+var company_name = $('#company_name').val().trim();
+var company_mail = $('#company_mail').val().trim();
+
+	  if (product_code !="" && product_no!="" && company_name!="" && company_mail!="")
+	  {
+	  	$("#checkbox").prop("checked", true);
+		$("#hidden_id").val("True");
+
+	  }
+	  else
+	  {
+	  	$("#checkbox").prop("checked", false);
+		$("#hidden_id").val("False");
+	  }
+}
+</script>
+<script>
+function pro_code(){
+var product_code = $('#product_code').val();
+var  product_code_pattern= /^[a-zA-Z0-9]+$/;
+if (product_code=="")
+	{
+		alert("Please enter product code");
+		return false;
+	}
+if (!product_code_pattern.test(product_code))
+	{
+		alert("Please enter valid product code");
+		return false;
+	}
+}
+</script>
+<script>
+
+</script>
+
+<script>
+function pro_no(){
+var product_no = $('#product_no').val();
+var  product_no_pattern= /^[0-9]+$/;
+
+if (product_no=="")
+	{
+		alert("Please enter product number");
+		return false;
+	}
+
+if (!product_no_pattern.test(product_no))
+	{
+		alert("Please enter valid product number");
+		return false;
+	}
+}
+</script>
+<script>
+function company_n(){
+var company_name = $('#company_name').val();
+var  company_name_pattern= /^[A-Za-z\s]+$/;;
+
+if (company_name=="")
+	{
+		alert("Please enter company name.");
+		return false;
+	}
+
+if (!company_name_pattern.test(company_name))
+	{
+		alert("Please enter valid company name");
+		return false;
+	}
+}
+</script>
+
+<script>
+function company_m(){
+var company_mail = $('#company_mail').val();
+var company_mail_pattern= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (company_mail=="")
+	{
+		alert("Please enter company mail.");
+		return false;
+	}
+
+if (!company_mail_pattern.test(company_mail))
+	{
+		alert("Please enter valid company mail.");
+		return false;
+	}
+}
+</script>
+
+<script>
+function index_func(){
+var product_code = $('#product_code').val();
+var  product_code_pattern= /^[a-zA-Z0-9]+$/;
+if (product_code=="")
+	{
+		alert("Please enter product code");
+		return false;
+	}
+if (!product_code_pattern.test(product_code))
+	{
+		alert("Please enter valid product code");
+		return false;
+	}
+
+var product_no = $('#product_no').val();
+var  product_no_pattern= /^[0-9]+$/;
+
+if (product_no=="")
+	{
+		alert("Please enter product number");
+		return false;
+	}
+
+if (!product_no_pattern.test(product_no))
+	{
+		alert("Please enter valid product number");
+		return false;
+	}
+
+var company_name = $('#company_name').val();
+var  company_name_pattern= /^[A-Za-z\s]+$/;;
+
+if (company_name=="")
+	{
+		alert("Please enter company name.");
+		return false;
+	}
+
+if (!company_name_pattern.test(company_name))
+	{
+		alert("Please enter valid company name");
+		return false;
+	}
+
+var company_mail = $('#company_mail').val();
+var company_mail_pattern= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (company_mail=="")
+	{
+		alert("Please enter company mail.");
+		return false;
+	}
+
+if (!company_mail_pattern.test(company_mail))
+	{
+		alert("Please enter valid company mail.");
+		return false;
+	}
+
+var formData = new FormData($("#form_data")[0]);
+$.ajax({
+    url: "/headerapp/header/",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data)
+    {
+
+        window.location.href = '/headerapp/header_update/'+data.id+'/';
+        alert("Data Saved Successfully !!")
+    }
+});
+
+}
+</script>
+<script>
+function check_func(){
+var v1 = $("#checkbox").prop("checked");
+if (v1)
+	{
+		$("#hidden_check").val("True");
+	}
+else
+	{
+		$("#hidden_check").val("False");
+	}
+
+}
+</script>
+<script>
+function newFunc(){
+	var p_code = $('#product_code').val()
+		if (p_code=='')
+		{
+			return false;
+		}
+		else
+		{
+			var dict ={'p_code':p_code};
+			$.ajax({
+			    url: "/headerapp/get_value/",
+				type: "POST",
+				data: dict,
+				success: function(data)
+    				{
+						if (data.num == 1)
+						{
+							alert("Same product code already exists");
+							$('#product_code').val('');
+						}
+    				}
+			});
+		}
+	}
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+</body>
+</html>
